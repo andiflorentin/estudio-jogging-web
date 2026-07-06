@@ -5,11 +5,10 @@
 
 .logo-work-container {
     position: relative;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 55px;
+    padding: 22px 34px;
 }
 
 .nav-bar__work-blob-svg {
@@ -24,13 +23,12 @@
 .logo-work-text {
     position: relative;
     z-index: 2;
-    font-family: 'Epilogue', sans-serif;
+    font-family: 'Nikkei Journal', sans-serif;
     font-weight: 800;
-    font-size: 2rem;
-    margin-left: 60px;
-    color: inherit;
+    font-size: 0.95rem;
+    margin-left: 0;
+    color: var(--azul);
     letter-spacing: -0.5px;
-    transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar {
@@ -130,15 +128,15 @@
 /* --- Left Popout (Work) --- */
 .nav-left .nav-popout {
     top: 8px;
-    left: -8px;
+    right: -8px;
     width: 320px;
-    height: 500px;
+    height: 440px;
 }
 
 .nav-left .nav-popout-inner {
     width: 100%;
     height: 100%;
-    padding: 100px 24px 24px 24px;
+    padding: 55px 24px 24px 24px;
     /* Space for the Work logo at the top */
     gap: 20px;
 }
@@ -196,38 +194,52 @@
     width: fit-content;
 }
 
-.badge-maroon {
-    background-color: #B1536E;
-    /* Deep maroon/pink */
+.badge-rosa {
+    background-color: var(--rosa);
     color: var(--color-dark);
 }
 
-.badge-pink {
-    background-color: #EBB6F4;
-    /* Light pink */
+.badge-naranja {
+    background-color: var(--naranja);
+    color: var(--color-dark);
+}
+
+.badge-azul {
+    background-color: var(--azul);
+    color: var(--color-white);
+}
+
+.badge-crema {
+    background-color: var(--crema);
     color: var(--color-dark);
 }
 
 .nav-work-title {
-    margin-top: 50px;
-    font-size: 1.3rem;
+    margin-top: 0;
+    font-size: 1rem;
     font-weight: 650;
     line-height: 1.1;
     letter-spacing: -0.5px;
+    white-space: nowrap;
 }
 
 .nav-work-btn {
     display: block;
     text-align: center;
-    background-color: var(--color-black);
+    background-color: var(--azul);
     color: var(--color-white);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 999px;
     font-weight: 800;
     font-size: 1.4rem;
     text-decoration: none;
-    margin-top: 10rem;
+    margin-top: auto;
+    transition: background-color 0.25s ease;
     cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.nav-work-btn:hover {
+    background-color: var(--naranja);
 }
 
 /* --- Right Popout (WhatsApp) --- */

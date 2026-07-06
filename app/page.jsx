@@ -26,10 +26,10 @@ export default function Home() {
             </header>
             <HorizontalWords />
             <main>
+                <Showreel />
                 <div className="content-section motion-cards-wrapper">
                     <MotionCards />
                 </div>
-                <Showreel />
                 <div className="content-section service-cards-wrapper">
                     <ServiceCards />
                 </div>

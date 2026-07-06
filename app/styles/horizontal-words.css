@@ -46,9 +46,9 @@
 }
 
 .horizontal-words__bottom-text-l {
-    max-width: 24em;
+    max-width: 34em;
     font-size: 1.5rem;
-    line-height: 1.4;
+    line-height: 1.25;
     font-weight: 400;
     margin: 0;
     /* Removed the hacky centered margin */
@@ -107,11 +107,12 @@
 }
 
 .horizontal-words__h2 {
+    font-family: 'Nikkei Journal', sans-serif;
     font-size: 8vw;
     line-height: 1;
     font-weight: 800;
     margin: 0;
-    text-transform: lowercase;
+    text-transform: none;
     position: relative;
     z-index: 2;
     white-space: nowrap;

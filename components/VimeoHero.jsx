@@ -3,12 +3,40 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
+// Natural size of public/assets/Eimg_hero.png, and where the monitor/laptop/phone
+// screens sit within it (as fractions of the image), measured directly from the
+// artwork's pixels. Used to keep the overlay buttons glued to those screens under
+// object-fit: cover regardless of viewport size/aspect.
+const HERO_IMG_SIZE = { w: 4722, h: 3005 };
+const OVERLAY_RECTS = {
+    monitor: { left: 0.40432, right: 0.57900, top: 0.50083, bottom: 0.64759 },
+    laptop: { left: 0.68595, right: 0.77436, top: 0.63461, bottom: 0.73844 },
+    phone: { left: 0.30008, right: 0.32931, top: 0.77437, bottom: 0.81131 },
+};
+
+function coverRectToViewport(rect, vw, vh) {
+    const scale = Math.max(vw / HERO_IMG_SIZE.w, vh / HERO_IMG_SIZE.h);
+    const renderedW = HERO_IMG_SIZE.w * scale;
+    const renderedH = HERO_IMG_SIZE.h * scale;
+    const offsetX = (vw - renderedW) / 2;
+    const offsetY = (vh - renderedH) / 2;
+    return {
+        left: offsetX + rect.left * renderedW,
+        right: offsetX + rect.right * renderedW,
+        top: offsetY + rect.top * renderedH,
+        bottom: offsetY + rect.bottom * renderedH,
+    };
+}
+
 export default function VimeoHero() {
     const iframeRef = useRef(null);
     const playerRef = useRef(null);
     const bubbleRef = useRef(null);
     const titleRef = useRef(null);
     const controlsRef = useRef(null);
+    const projectsBtnRef = useRef(null);
+    const laptopContactRef = useRef(null);
+    const phoneWaRef = useRef(null);
 
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(true);
@@ -79,6 +107,13 @@ export default function VimeoHero() {
             controls.addEventListener('mouseleave', showBubbleForElement);
         }
 
+        // Desk-illustration buttons also sit above the mute cloud — hide it on hover
+        const overlayEls = [projectsBtnRef.current, laptopContactRef.current, phoneWaRef.current].filter(Boolean);
+        overlayEls.forEach((el) => {
+            el.addEventListener('mouseenter', hideBubbleForElement);
+            el.addEventListener('mouseleave', showBubbleForElement);
+        });
+
         return () => {
             window.removeEventListener('mousemove', onMove);
             hero.removeEventListener('mouseenter', onEnter);
@@ -92,7 +127,42 @@ export default function VimeoHero() {
                 controls.removeEventListener('mouseenter', hideBubbleForElement);
                 controls.removeEventListener('mouseleave', showBubbleForElement);
             }
+            overlayEls.forEach((el) => {
+                el.removeEventListener('mouseenter', hideBubbleForElement);
+                el.removeEventListener('mouseleave', showBubbleForElement);
+            });
         };
+    }, []);
+
+    /* ── Keep the desk-illustration overlays glued to their screens ── */
+    useEffect(() => {
+        const updateOverlayPositions = () => {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const monitor = coverRectToViewport(OVERLAY_RECTS.monitor, vw, vh);
+            const laptop = coverRectToViewport(OVERLAY_RECTS.laptop, vw, vh);
+            const phone = coverRectToViewport(OVERLAY_RECTS.phone, vw, vh);
+
+            if (projectsBtnRef.current) {
+                // Dead center of the monitor screen
+                projectsBtnRef.current.style.left = `${(monitor.left + monitor.right) / 2}px`;
+                projectsBtnRef.current.style.top = `${(monitor.top + monitor.bottom) / 2}px`;
+            }
+            if (laptopContactRef.current) {
+                // Dead center of the laptop screen (CSS handles the perspective tilt)
+                laptopContactRef.current.style.left = `${(laptop.left + laptop.right) / 2}px`;
+                laptopContactRef.current.style.top = `${(laptop.top + laptop.bottom) / 2}px`;
+            }
+            if (phoneWaRef.current) {
+                // Floats above the phone as a speech bubble, not glued to its screen
+                phoneWaRef.current.style.left = `${(phone.left + phone.right) / 2}px`;
+                phoneWaRef.current.style.top = `${phone.top}px`;
+            }
+        };
+
+        updateOverlayPositions();
+        window.addEventListener('resize', updateOverlayPositions);
+        return () => window.removeEventListener('resize', updateOverlayPositions);
     }, []);
 
     /* ── Controls ── */
@@ -136,7 +206,7 @@ export default function VimeoHero() {
                 <div className="vimeo-mute-bubble__blob">
                     {/* Blob shape */}
                     <img
-                        src="/assets/VimeoHero SVG/mute-bubble-blob.svg"
+                        src="/assets/Nubes/2nube.svg"
                         alt=""
                         className="vimeo-mute-bubble__blob-svg"
                     />
@@ -174,6 +244,7 @@ export default function VimeoHero() {
                 <video
                     ref={iframeRef}
                     // src="/your-personal-video.mp4"
+                    poster="/assets/Eimg_hero.png"
                     autoPlay
                     loop
                     muted
@@ -185,58 +256,38 @@ export default function VimeoHero() {
                 {/* Gradient fade */}
                 <div className="vimeo-hero__fade" />
 
-                {/* ① Headline — bottom left, word-by-word layout */}
-                <div className="home-header__title">
-                    <h1 className="vimeo-hero__title" ref={titleRef} onClick={(e) => e.stopPropagation()}>
+                {/* ⑤ Desk-illustration overlays — CTA above the monitor, contact on the laptop, WhatsApp on the phone */}
+                <a
+                    ref={projectsBtnRef}
+                    href="#cards-wrapper"
+                    className="vimeo-hero__projects-btn"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Proyectos
+                </a>
 
-                        {/* "we" */}
-                        <span className="vimeo-hero__word">we </span>
+                <a
+                    ref={laptopContactRef}
+                    href="mailto:estudiojogging@gmail.com"
+                    className="vimeo-hero__laptop-contact"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Contáctanos
+                </a>
 
-                        {/* "make" + ⑤ smiley (no animation) */}
-                        <span className="vimeo-hero__word is--relative">
-                            <span>make </span>
-                            <div className="home-header__smiley">
-                                <img
-                                    src="/assets/VimeoHero SVG/smiley-face.svg"
-                                    alt=""
-                                    className="home-header__smiley-svg"
-                                />
-                            </div>
-                        </span>
-
-                        {/* "advertising" italic */}
-                        <span className="vimeo-hero__word"><em>advertising </em></span>
-
-                        {/* "for" */}
-                        <span className="vimeo-hero__word">for </span>
-
-                        <div style={{ flexBasis: '100%', height: 0 }} />
-
-                        <span className="vimeo-hero__word">the </span>
-                        <span className="vimeo-hero__word">new </span>
-
-                        {/* "mainstream" + ⑤ pink star (no spin) + oval underline */}
-                        <span className="vimeo-hero__word is--relative">
-                            <div className="home-header__star">
-                                <div className="home-header__star-inner">
-                                    <img
-                                        src="/assets/VimeoHero SVG/pink-star.svg"
-                                        alt=""
-                                        className="home-header__star-svg"
-                                    />
-                                </div>
-                            </div>
-                            {/* Oval underline */}
-                            <img
-                                src="/assets/VimeoHero SVG/oval-underline.svg"
-                                alt=""
-                                className="home-header__title-line-svg"
-                            />
-                            <span>mainstream</span>
-                        </span>
-
-                    </h1>
-                </div>
+                <a
+                    ref={phoneWaRef}
+                    href="https://wa.me/NUMERO"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="vimeo-hero__phone-whatsapp"
+                    aria-label="WhatsApp"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.4 21 3 13.6 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" fill="currentColor" />
+                    </svg>
+                </a>
 
                 {/* ① Controls — bottom LEFT: pause/play + fullscreen */}
                 <div className="vimeo-hero__controls" ref={controlsRef} onClick={(e) => e.stopPropagation()}>

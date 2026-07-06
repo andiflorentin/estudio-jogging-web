@@ -3,12 +3,12 @@
 /* The outer wrapper */
 .vimeo-hero {
     position: relative;
-    width: calc(100% - 24px);
-    height: calc(100vh - 24px);
-    margin: 12px auto;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
     overflow: hidden;
     background-color: var(--color-black-soft);
-    border-radius: 24px;
+    border-radius: 0;
     cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 2 0, pointer;
 }
 
@@ -49,10 +49,7 @@
 .vimeo-hero__fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom,
-            transparent 30%,
-            rgba(0, 0, 0, 0.2) 60%,
-            rgba(0, 0, 0, 0.7) 100%);
+    background: none;
     z-index: 2;
     pointer-events: none;
 }
@@ -103,8 +100,8 @@
 
 /* Italic "advertising" */
 .vimeo-hero__title em {
-    font-family: 'Times New Roman', Georgia, serif;
-    font-style: italic;
+    font-family: 'Reenie Beanie', cursive;
+    font-style: normal;
     font-weight: 400;
     letter-spacing: -1px;
 }
@@ -238,8 +235,8 @@
 /* The blob shape behind the mute icons */
 .vimeo-mute-bubble__blob {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,8 +252,8 @@
 .vimeo-mute-bubble__icon {
     position: relative;
     z-index: 1;
-    width: 56px;
-    height: 56px;
+    width: 38px;
+    height: 38px;
     color: var(--color-dark);
     display: flex;
     align-items: center;
@@ -298,4 +295,106 @@
 .home-header__blob-svg,
 .home-header__mute-icons {
     display: none;
+}
+
+/* ─── Desk-illustration overlays ─────────────────────────────────────────────
+   Positions are computed in JS (see coverRectToViewport in VimeoHero.jsx) from
+   the real screen/phone regions in Eimg_hero.png, accounting for the object-fit:
+   cover crop at the current viewport size — so they stay glued to the artwork
+   at any window size/aspect. Below 900px we hide them instead of drifting. */
+
+.vimeo-hero__projects-btn,
+.vimeo-hero__laptop-contact,
+.vimeo-hero__phone-whatsapp {
+    position: absolute;
+    z-index: 6;
+    pointer-events: auto;
+}
+
+@media (max-width: 900px) {
+
+    .vimeo-hero__projects-btn,
+    .vimeo-hero__laptop-contact,
+    .vimeo-hero__phone-whatsapp {
+        display: none;
+    }
+}
+
+/* Shared pill look for the two screen CTAs (Proyectos / Contáctanos) */
+.vimeo-hero__projects-btn,
+.vimeo-hero__laptop-contact {
+    background-color: var(--azul);
+    color: var(--color-white);
+    font-weight: 800;
+    font-size: clamp(0.8rem, 1vw, 1.15rem);
+    letter-spacing: -0.2px;
+    padding: clamp(10px, 0.9vw, 16px) clamp(20px, 2.1vw, 32px);
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.vimeo-hero__projects-btn:hover,
+.vimeo-hero__laptop-contact:hover {
+    background-color: var(--naranja);
+}
+
+/* ① "Proyectos" — dead center of the main monitor, facing the viewer straight-on */
+.vimeo-hero__projects-btn {
+    transform: translate(-50%, -50%);
+}
+
+.vimeo-hero__projects-btn:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+/* ② "Contáctanos" — dead center of the laptop screen, tilted to match its perspective */
+.vimeo-hero__laptop-contact {
+    transform: translate(-50%, -50%) rotate(6deg);
+    font-size: clamp(0.6rem, 0.75vw, 0.85rem);
+    padding: clamp(6px, 0.55vw, 10px) clamp(12px, 1.3vw, 20px);
+}
+
+.vimeo-hero__laptop-contact:hover {
+    transform: translate(-50%, -50%) rotate(6deg) scale(1.06);
+}
+
+/* ③ WhatsApp — a speech bubble floating above the phone, not painted on its screen */
+.vimeo-hero__phone-whatsapp {
+    width: clamp(34px, 2.6vw, 50px);
+    height: clamp(30px, 2.3vw, 44px);
+    transform: translate(-50%, calc(-45% - 4px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #25d366;
+    border-radius: 14px;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.vimeo-hero__phone-whatsapp::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #25d366;
+}
+
+.vimeo-hero__phone-whatsapp svg {
+    width: 52%;
+    height: 52%;
+    color: var(--color-white);
+    transition: transform 0.2s ease-out;
+}
+
+.vimeo-hero__phone-whatsapp:hover svg {
+    transform: scale(1.18);
 }

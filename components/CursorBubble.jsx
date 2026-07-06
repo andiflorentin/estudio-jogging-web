@@ -25,7 +25,7 @@ export default function CursorBubble() {
 
             if (found && !isHoveringClickable) {
                 isHoveringClickable = true;
-                if (found.matches('.logo-truus')) cursorBubble.textContent = 'to home';
+                if (found.matches('.logo-truus')) cursorBubble.textContent = 'en casa';
                 else if (found.matches('.nav-work-btn')) cursorBubble.textContent = 'click';
                 else cursorBubble.textContent = 'click';
                 gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');

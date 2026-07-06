@@ -3,8 +3,8 @@
     position: relative;
     width: 100%;
     max-width: 1400px;
-    height: 650px;
-    margin: 100px auto 100px 100px;
+    height: 440px;
+    margin: 20px auto 160px;
     display: flex;
     justify-content: center;
     cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
@@ -13,13 +13,13 @@
 /* ─── Base Card ──────────────────────────────────────────────────────────── */
 .card {
     width: 320px;
-    height: 460px;
+    height: 360px;
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
-    gap: 1.5rem;
+    gap: 1.25rem;
     padding: 3.5rem 1.5rem 1.5rem;
     cursor: pointer;
     border-radius: 10px;
@@ -31,12 +31,21 @@
 
 .card-title {
     text-align: left;
-    font-size: 2.2rem;
-    font-family: 'Epilogue', sans-serif;
+    font-size: 1.55rem;
+    font-family: 'Nikkei Journal', sans-serif;
     font-weight: 800;
-    margin-top: 30px;
-    line-height: 1;
-    letter-spacing: -1px;
+    margin-top: 0;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+
+.card-description {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
 }
 
 .card-divider-svg {
@@ -59,8 +68,8 @@
 .card-darkblue {
     background-color: var(--color-lightblue);
     color: var(--color-dark);
-    left: calc(50% - 430px);
-    top: 100px;
+    left: calc(50% - 565px);
+    top: 60px;
     transform: rotate(-5deg);
     z-index: 2;
 }
@@ -68,7 +77,7 @@
 .card-orange {
     background-color: var(--color-orange);
     color: var(--color-dark);
-    left: calc(50% - 220px);
+    left: calc(50% - 295px);
     top: 20px;
     transform: rotate(5deg);
     z-index: 3;
@@ -76,7 +85,7 @@
 
 .card-maroon {
     background-color: var(--color-maroon);
-    left: calc(50% + 50px);
+    left: calc(50% - 25px);
     top: 30px;
     transform: rotate(-8deg);
     z-index: 4;
@@ -85,8 +94,8 @@
 .card-pink {
     background-color: var(--color-pink);
     color: var(--color-dark);
-    left: calc(50% + 320px);
-    top: 70px;
+    left: calc(50% + 245px);
+    top: 60px;
     transform: rotate(5deg);
     z-index: 5;
 }
@@ -138,11 +147,11 @@
 
 /* ─── Card Sticker Variables ─────────────────────────────────────────────── */
 :root {
-    --sticker-camera-w: 160px;
-    --sticker-phone-w: 120px;
-    --sticker-smiley-w: 120px;
-    --sticker-hand-w: 120px;
-    --sticker-heart-w: 140px;
+    --sticker-camera-w: 120px;
+    --sticker-phone-w: 85px;
+    --sticker-smiley-w: 85px;
+    --sticker-hand-w: 85px;
+    --sticker-heart-w: 100px;
 
     --sticker-camera-top: -45px;
     --sticker-camera-left: 120px;

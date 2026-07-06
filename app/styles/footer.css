@@ -1,16 +1,16 @@
 /* ─── Footer Shell ───────────────────────────────────────────────────────── */
 .main-footer {
-    padding: 10px;
+    padding: 0;
     background-color: var(--bg-color);
 }
 
 .footer-inner {
     background-color: var(--color-darkblue);
-    border-radius: 20px;
-    padding: 80px 40px 40px;
+    border-radius: 0;
+    padding: 150px 40px 40px;
     position: relative;
     overflow: hidden;
-    min-height: 95vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -19,18 +19,38 @@
 /* ─── Top Row ────────────────────────────────────────────────────────────── */
 .footer-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 40px;
     position: relative;
     z-index: 5;
+    transform: translateY(55px);
 }
 
 .footer-column {
-    flex: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 28px;
+    width: 100%;
+    color: var(--color-white);
+}
+
+.footer-contact-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    color: var(--color-white);
+    gap: 12px;
+}
+
+.footer-contact-group--left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.footer-contact-group--right {
+    align-items: flex-end;
+    text-align: right;
 }
 
 .footer-badge {
@@ -113,7 +133,7 @@
 }
 
 .footer-note {
-    font-size: 1rem;
+    font-size: 0.72rem;
     opacity: 0.8;
     line-height: 1.4;
     cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
@@ -123,7 +143,11 @@
 .footer-socials {
     display: flex;
     gap: 25px;
-    margin-top: 1px;
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
 }
 
 .footer-socials a {
@@ -154,13 +178,16 @@
     text-align: center;
     pointer-events: none;
     user-select: none;
-    margin-bottom: -70px;
+    margin-bottom: 0;
+    transform: translateY(45px);
 }
 
 .footer-logo__svg {
-    width: 104.9%;
+    width: 80%;
+    max-height: 60vh;
     height: auto;
-    margin-left: -2.5%;
+    margin-left: 0;
+    object-fit: contain;
 }
 
 .footer-bottom-row {
@@ -239,9 +266,9 @@
 
 .credits-content {
     display: flex;
-    /* REDUCED BOX SIZE: Makes the box smaller without changing text size */
-    gap: 38px;
-    padding: 34px 26px;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 22px;
     white-space: nowrap;
     width: max-content;
     height: max-content;
@@ -265,16 +292,17 @@
 
 .credits-label {
     color: var(--color-white);
-    font-size: 1.3rem;
-    font-weight: 950;
+    font-size: 0.78rem;
+    font-weight: 400;
     font-family: 'Epilogue', sans-serif;
+    opacity: 0.85;
 }
 
 .credits-name {
     color: var(--color-white);
-    font-size: 1.1rem;
-    font-weight: 450;
-    font-family: 'Epilogue', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: 'Nikkei Journal', sans-serif;
     opacity: 0.9;
     text-decoration: none;
     /* Removed underline since it's an <a> tag now */
