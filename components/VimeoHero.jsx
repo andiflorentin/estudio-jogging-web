@@ -30,6 +30,7 @@ function coverRectToViewport(rect, vw, vh) {
 
 export default function VimeoHero() {
     const iframeRef = useRef(null);
+    const audioRef = useRef(null);
     const playerRef = useRef(null);
     const bubbleRef = useRef(null);
     const titleRef = useRef(null);
@@ -45,6 +46,16 @@ export default function VimeoHero() {
 
     // Native video loads immediately enough that we don't need a heavy ready listener.
     // We already handle `setIsLoaded(true)` directly on the <video onLoadedData={...}> element.
+
+    // React doesn't reliably reflect the `muted` JSX attribute as the real DOM property
+    // on media elements after hydration, which can silently block autoplay — set it
+    // imperatively and kick off playback ourselves instead of trusting `autoPlay` alone.
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+        audio.muted = true;
+        audio.play().catch(() => { });
+    }, []);
 
     /* ────────────────────────────────────────────────────
        ④ Hover mute bubble — same GSAP elastic spring as CursorBubble
@@ -171,8 +182,10 @@ export default function VimeoHero() {
         if (!iframeRef.current) return;
         if (isPlaying) {
             iframeRef.current.pause();
+            audioRef.current?.pause();
         } else {
             iframeRef.current.play();
+            audioRef.current?.play();
         }
         setIsPlaying(p => !p);
     };
@@ -180,7 +193,16 @@ export default function VimeoHero() {
     const toggleMute = (e) => {
         if (e) e.stopPropagation();
         if (!iframeRef.current) return;
+        const willUnmute = isMuted;
         iframeRef.current.muted = !isMuted;
+        if (audioRef.current) audioRef.current.muted = !isMuted;
+        // Re-issue play() synchronously inside this trusted click handler — some
+        // browsers otherwise never actually start audible playback after a reload,
+        // even though muted/paused flags look fine.
+        if (willUnmute) {
+            iframeRef.current.play().catch(() => { });
+            audioRef.current?.play().catch(() => { });
+        }
         setIsMuted(m => !m);
     };
 
@@ -251,6 +273,15 @@ export default function VimeoHero() {
                     playsInline
                     className="vimeo-hero__iframe"
                     style={{ objectFit: 'cover', backgroundColor: '#111' }}
+                />
+
+                {/* Background music — muted/paused in lockstep with the video controls */}
+                <audio
+                    ref={audioRef}
+                    src="/fassounds-good-night-lofi-cozy-chill-music-160166.mp3"
+                    autoPlay
+                    loop
+                    muted
                 />
 
                 {/* Gradient fade */}
