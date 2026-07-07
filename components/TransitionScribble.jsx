@@ -42,7 +42,7 @@ export default function TransitionScribble() {
                 transitionLogo.className = 'transition-logo';
                 transitionLogo.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10000; pointer-events:none; opacity:0; display:flex; justify-content:center; align-items:center; transition: color 0.1s;';
                 const svgClone = document.querySelector('.logo-truus').cloneNode(true);
-                svgClone.style.width = '150px';
+                svgClone.style.width = 'min(45vw, 420px)';
                 svgClone.style.height = 'auto';
                 transitionLogo.appendChild(svgClone);
                 document.body.appendChild(transitionLogo);
