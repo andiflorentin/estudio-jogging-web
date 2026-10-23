@@ -1,0 +1,384 @@
+/* ─── Vimeo Hero ────────────────────────────────────────────────────────────── */
+
+/* The outer wrapper */
+.vimeo-hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100svh; /* celular: alto visible real (sin la barra del navegador), así los botones de abajo quedan en pantalla */
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--color-black-soft);
+    border-radius: 0;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 2 0, pointer;
+}
+
+/* ── Iframe fills the container in "cover" mode ── */
+.vimeo-hero__iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 56.25vw;
+    /* 16:9 */
+    min-height: 100vh;
+    min-width: 177.78vh;
+    /* 16:9 inverted */
+    border: none;
+    pointer-events: none;
+}
+
+/* ── Thumbnail placeholder ── */
+.vimeo-hero__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+.vimeo-hero__placeholder--hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Bottom gradient fade so text pops ── */
+.vimeo-hero__fade {
+    position: absolute;
+    inset: 0;
+    background: none;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────
+   ① Headline — bottom-left, matching the screenshot
+───────────────────────────────────────────────── */
+.home-header__title {
+    position: absolute;
+    bottom: 72px;
+    left: 0;
+    right: 0;
+    padding: 0 44px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.vimeo-hero__title {
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 6.5vw, 6.5rem);
+    line-height: 1.0;
+    letter-spacing: -3px;
+    color: var(--color-white);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0 0.16em;
+    user-select: none;
+    pointer-events: auto;
+    cursor: url("/assets/Cursor SVG/cursor-text.svg") 2 0, text;
+}
+
+.vimeo-hero__title * {
+    cursor: url("/assets/Cursor SVG/cursor-text.svg") 2 0, text;
+}
+
+/* Each word span */
+.vimeo-hero__word {
+    display: inline-block;
+    position: static;
+}
+
+.vimeo-hero__word.is--relative {
+    position: relative;
+}
+
+/* Italic "advertising" */
+.vimeo-hero__title em {
+    font-family: 'Reenie Beanie', cursive;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -1px;
+}
+
+/* ─── ⑤ Smiley — NO animation ─────────────────── */
+.home-header__smiley {
+    position: absolute;
+    top: -0.35em;
+    left: 0.4em;
+    width: 1em;
+    height: 1em;
+    pointer-events: none;
+    z-index: 10;
+    rotate: calc(-30deg);
+}
+
+.home-header__smiley-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ─── ⑤ Pink star — NO spin animation ─────────── */
+.home-header__star {
+    position: absolute;
+    top: 10%;
+    right: -0.6em;
+    transform: translateY(-50%);
+    width: 0.8em;
+    height: 0.8em;
+    pointer-events: none;
+    rotate: calc(10deg);
+}
+
+.home-header__star-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-header__star-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ─── Oval underline under "mainstream" ────────── */
+.home-header__title-line-svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 104%;
+    color: var(--color-white);
+    overflow: visible;
+    pointer-events: none;
+}
+
+.home-header__title-line-path {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: draw-oval-underline 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.3s;
+}
+
+@keyframes draw-oval-underline {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ─────────────────────────────────────────────────
+   ④ Hover mute cursor bubble — appears on video hover
+   (same elastic spring as .cursor-bubble)
+───────────────────────────────────────────────── */
+.vimeo-mute-bubble {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transform: scale(0) rotate(-30deg);
+    transform-origin: left center;
+}
+
+/* The blob shape behind the mute icons */
+.vimeo-mute-bubble__blob {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vimeo-mute-bubble__blob-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.vimeo-mute-bubble__icon {
+    position: relative;
+    z-index: 1;
+    width: 38px;
+    height: 38px;
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vimeo-mute-bubble__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* show/hide based on mute state */
+.vimeo-mute-bubble.is--muted .vimeo-mute-bubble__unmute {
+    display: none;
+}
+
+.vimeo-mute-bubble.is--unmuted .vimeo-mute-bubble__mute {
+    display: none;
+}
+
+/* ── Loading spinner ── */
+.vimeo-hero__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.vimeo-hero__spinner {
+    width: 48px;
+    height: 48px;
+    opacity: 0.7;
+}
+
+/* ─── Remove old blob inside headline (no longer needed) ─── */
+.home-header__touch-play,
+.home-header__blob-svg,
+.home-header__mute-icons {
+    display: none;
+}
+
+/* ─── Desk-illustration overlays ─────────────────────────────────────────────
+   Positions are computed in JS (see coverRectToViewport in VimeoHero.jsx) from
+   the real screen/phone regions in Eimg_hero.png, accounting for the object-fit:
+   cover crop at the current viewport size — so they stay glued to the artwork
+   at any window size/aspect. Below 900px the artwork crops too much, so they become
+   a bar at the bottom of the hero instead (see the media query at the end). */
+
+.vimeo-hero__projects-btn,
+.vimeo-hero__laptop-contact,
+.vimeo-hero__phone-whatsapp {
+    position: absolute;
+    z-index: 6;
+    pointer-events: auto;
+}
+
+/* Shared pill look for the two screen CTAs (Proyectos / Contáctanos) */
+.vimeo-hero__projects-btn,
+.vimeo-hero__laptop-contact {
+    background-color: var(--azul);
+    color: var(--color-white);
+    font-weight: 800;
+    font-size: clamp(1rem, 1.35vw, 1.5rem); /* más grandes: se leen mejor sobre la ilustración */
+    letter-spacing: -0.2px;
+    padding: clamp(13px, 1.2vw, 21px) clamp(26px, 2.8vw, 44px);
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.vimeo-hero__projects-btn:hover,
+.vimeo-hero__laptop-contact:hover {
+    background-color: var(--naranja);
+}
+
+/* ① "Proyectos" — dead center of the main monitor, facing the viewer straight-on */
+.vimeo-hero__projects-btn {
+    transform: translate(-50%, -50%);
+}
+
+.vimeo-hero__projects-btn:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+/* ② "Contáctanos" — dead center of the laptop screen, tilted to match its perspective */
+.vimeo-hero__laptop-contact {
+    transform: translate(-50%, -50%) rotate(6deg);
+    font-size: clamp(0.8rem, 1vw, 1.15rem);
+    padding: clamp(8px, 0.75vw, 13px) clamp(16px, 1.75vw, 27px);
+}
+
+.vimeo-hero__laptop-contact:hover {
+    transform: translate(-50%, -50%) rotate(6deg) scale(1.06);
+}
+
+/* ③ WhatsApp — a speech bubble floating above the phone, not painted on its screen */
+.vimeo-hero__phone-whatsapp {
+    width: clamp(46px, 3.5vw, 68px);
+    height: clamp(40px, 3.1vw, 60px);
+    transform: translate(-50%, calc(-45% - 4px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #25d366;
+    border-radius: 14px;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vimeo-hero__phone-whatsapp:hover {
+    transform: translate(-50%, calc(-45% - 4px)) scale(1.25);
+}
+
+.vimeo-hero__phone-whatsapp::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #25d366;
+}
+
+.vimeo-hero__phone-whatsapp svg {
+    width: 52%;
+    height: 52%;
+    color: var(--color-white);
+    transition: transform 0.2s ease-out;
+}
+
+.vimeo-hero__phone-whatsapp:hover svg {
+    transform: scale(1.18);
+}
+
+/* ─── Celular / tablet: la ilustración se recorta y el monitor, la notebook y el celular
+   no entran juntos: "Proyectos" y "Contáctanos" van en el monitor y WhatsApp centrado debajo del monitor. */
+@media (max-width: 900px) {
+    .vimeo-hero__projects-btn,
+    .vimeo-hero__laptop-contact {
+        font-size: 0.95rem;
+        width: 170px; /* los dos del mismo ancho */
+        padding: 13px 0;
+        text-align: center;
+    }
+
+    /* los dos apilados en el centro de la pantalla del monitor (VimeoHero.jsx les da el mismo punto);
+       +10px: el punto es el centro del monitor y el blanco de la pantalla queda un poco más abajo */
+    .vimeo-hero__projects-btn { transform: translate(-50%, calc(-100% + 6px)); }
+    .vimeo-hero__projects-btn:hover { transform: translate(-50%, calc(-100% + 6px)) scale(1.04); }
+
+    .vimeo-hero__laptop-contact { transform: translate(-50%, 14px); }
+    .vimeo-hero__laptop-contact:hover { transform: translate(-50%, 14px) scale(1.04); }
+
+    /* centrada debajo del monitor (posición en VimeoHero.jsx) */
+    .vimeo-hero__phone-whatsapp {
+        width: 46px;
+        height: 42px;
+        transform: translate(-50%, -50%);
+    }
+
+    .vimeo-hero__phone-whatsapp:hover { transform: translate(-50%, -50%) scale(1.1); }
+}

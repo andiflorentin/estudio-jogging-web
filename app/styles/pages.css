@@ -1,0 +1,1220 @@
+/* ─── Páginas internas: servicios, nosotros, proyectos ─────────────────────
+   Ritmo ref. mindmarket.com: hero de color pleno → paneles redondeados que
+   se apilan, eyebrow chico + título grande, manifiesto que se enciende al
+   scrollear, CTA de cierre en azul.
+──────────────────────────────────────────────────────────────────────────── */
+.inner-page {
+    overflow: clip;
+}
+
+/* :where() deja la especificidad baja para que .inner-hero--* pueda colorear links */
+.inner-page :where(a) {
+    color: inherit;
+    text-decoration: none;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+    /* El contenido arranca siempre a 230px o más del borde: así no pasa por debajo del logo
+       fijo de la navbar (40px + 150px). En pantallas anchas la columna centrada ya deja ese aire. */
+    padding: 0 clamp(40px, calc(230px - (100vw - 1320px) / 2), 230px);
+}
+
+.section {
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.inner-eyebrow {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.section-head {
+    margin-bottom: 64px;
+}
+
+.section-title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 5vw, 4.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 16ch;
+}
+
+/* título en una sola línea en desktop (en mobile vuelve a cortar solo) */
+.section-title--wide {
+    max-width: none;
+}
+
+.section-lead {
+    margin-top: 24px;
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+    line-height: 1.4;
+    max-width: 34ch;
+}
+
+/* Chips */
+.chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.chips li {
+    font-size: 0.82rem;
+    padding: 5px 12px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    line-height: 1;
+}
+
+/* Botones pill */
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.3s;
+}
+
+.pill-btn:hover { transform: translateY(-3px) rotate(-1.5deg); }
+.pill-btn--light { background: var(--blanco-hueso); color: var(--color-dark) !important; }
+.pill-btn--ghost { border: 2px solid currentColor; }
+.pill-btn--dark { background: var(--color-dark); color: var(--blanco-hueso); text-decoration: none; cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer; }
+
+/* ─── Hero de color ─── */
+.inner-hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 180px 0 110px;
+    border-radius: 0 0 48px 48px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.inner-hero--azul { background: var(--azul); color: var(--blanco-hueso); }
+.inner-hero--rosa { background: var(--rosa); color: var(--color-dark); }
+.inner-hero--naranja { background: var(--naranja); color: var(--color-dark); }
+.inner-hero--crema { background: var(--crema); color: var(--color-dark); }
+.inner-hero--rojo { background: var(--rojo); color: var(--blanco-hueso); }
+
+/* .wrap: misma columna y margen que el resto (el título no pasa por debajo del logo) */
+.inner-hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.inner-hero__title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 7vw, 7.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+}
+
+.section-title em {
+    font-style: normal;
+    font-weight: 300;
+}
+
+/* ponytail: ancho pensado para 2 líneas en desktop; en pantallas chicas fluye */
+.inner-hero__lead {
+    margin-top: 36px;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+    line-height: 1.35;
+    max-width: 62ch;
+}
+
+@keyframes sticker-float {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-16px) rotate(calc(var(--r, 0deg) * -1)); }
+}
+
+/* ─── Paneles ─── */
+.panel {
+    position: relative;
+    border-radius: 48px;
+    margin: 24px 16px;
+}
+
+.panel--cream { background: #efece2; padding: 140px 0; }
+.panel--crema { background: var(--crema); }
+
+/* Manifiesto: palabras que se encienden */
+.manifesto {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4.6vw, 4.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 22ch;
+}
+
+.manifesto .word {
+    display: inline-block;
+}
+
+/* ─── Split con columna sticky ─── */
+.split {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.split__sticky {
+    position: sticky;
+    top: 130px;
+}
+
+/* ─── Servicios ─── */
+.hover-list {
+    position: relative;
+}
+
+.service-list {
+    list-style: none;
+}
+
+.service-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 1.15fr;
+    gap: 40px;
+    align-items: start;
+    padding: 48px 0;
+    border-top: 1.5px solid var(--color-dark);
+}
+
+.service-row:last-child { border-bottom: 1.5px solid var(--color-dark); }
+/* hover: el contenido se corre con transform (con padding-left se achicaba el ancho y el texto cambiaba de línea) */
+.service-row > * { transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1); }
+.service-row:hover > * { transform: translateX(16px); }
+
+.service-row__num {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 800;
+    justify-self: start;
+}
+
+.service-row__title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 3.6vw, 3.3rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+}
+
+.service-row__text {
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+    line-height: 1.5;
+}
+
+.hover-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 260px;
+    aspect-ratio: 4 / 5;
+    margin: -160px 0 0 -130px;
+    border-radius: 18px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.6);
+    z-index: 5;
+}
+
+.hover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Pasos */
+.steps {
+    display: grid;
+    gap: 20px;
+}
+
+.step-card {
+    position: relative;
+    background: var(--blanco-hueso);
+    border-radius: 28px;
+    padding: 40px;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.step-card:hover { transform: rotate(-1deg) scale(1.01); }
+
+.step-card__n {
+    font-weight: 800;
+    font-size: 0.9rem;
+    opacity: 0.5;
+}
+
+.step-card__t {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+    letter-spacing: -0.02em;
+    margin: 8px 0 12px;
+}
+
+.step-card p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-width: 40ch;
+}
+
+.step-card__sticker {
+    position: absolute;
+    top: -22px;
+    right: 28px;
+    width: 76px;
+    transform: rotate(8deg);
+}
+
+/* ─── Nosotros ─── */
+.photo-strip {
+    padding: 100px 0 40px;
+    overflow: hidden;
+}
+
+.photo-strip__track {
+    display: flex;
+    gap: 28px;
+    width: max-content;
+    padding-left: 6vw;
+}
+
+.photo-card {
+    position: relative;
+    width: clamp(260px, 30vw, 440px);
+    aspect-ratio: 4 / 5;
+    border-radius: 22px;
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 22px;
+}
+
+.photo-card--a { transform: rotate(-3deg); }
+.photo-card--b { transform: rotate(2.5deg) translateY(40px); }
+
+/* celular: tira que se desliza con el dedo, como las fotos de la home */
+@media (max-width: 768px) {
+    .photo-strip { padding: 60px 0 20px; }
+    .photo-strip__track {
+        width: auto;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        gap: 16px;
+        padding: 24px 16px 64px;
+    }
+    .photo-strip__track::-webkit-scrollbar { display: none; }
+    .photo-card { width: 72vw; scroll-snap-align: center; }
+}
+
+.photo-card__tag {
+    position: absolute;
+    top: 18px;
+    left: -12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    transform: rotate(-4deg);
+    white-space: nowrap;
+}
+
+.badge-rojo { background: var(--rojo); color: var(--blanco-hueso); }
+
+.prose p {
+    font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+    line-height: 1.45;
+    margin-bottom: 32px;
+}
+
+.prose__img {
+    width: 100%;
+    border-radius: 28px;
+    margin-top: 16px;
+    display: block;
+}
+
+.find-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.find-card {
+    position: relative;
+    border-radius: 28px;
+    padding: 36px 28px 40px;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.find-card:nth-child(even) { margin-top: 60px; }
+.find-card:hover { transform: rotate(-2deg) translateY(-6px); }
+
+.find-card--rosa { background: var(--rosa); }
+.find-card--naranja { background: var(--naranja); }
+.find-card--azul { background: var(--azul); color: var(--color-dark); }
+.find-card--crema { background: var(--crema); }
+
+.find-card h3 {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+}
+
+.find-card p {
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+/* Ilustración arriba de cada tarjeta, grande y pegada al borde de arriba y a la derecha (la tarjeta la recorta);
+   el texto queda abajo (justify-content: flex-end) */
+.find-card { overflow: hidden; }
+.find-card__ilu {
+    width: calc(100% + 28px); /* hasta el borde derecho (padding de la tarjeta) */
+    height: auto; /* las apaisadas toman su alto real (no dejan aire); las altas las limita max-height */
+    max-height: 290px;
+    margin: -36px -28px auto 0; /* hasta el borde de arriba */
+    object-fit: contain;
+    object-position: right top;
+    padding-bottom: 20px;
+}
+
+/* centrada: de borde a borde de la tarjeta */
+.find-card__ilu--centro {
+    width: calc(100% + 56px);
+    margin-left: -28px;
+    object-position: center top;
+}
+
+/* ─── CTA de cierre ─── */
+.inner-cta {
+    position: relative;
+    margin: 24px 16px;
+    padding: 140px 40px;
+    border-radius: 48px;
+    background: var(--azul);
+    color: var(--blanco-hueso);
+    text-align: center;
+    overflow: hidden;
+}
+
+.inner-cta__title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    max-width: 14ch;
+    margin: 0 auto;
+}
+
+.inner-cta__text {
+    margin: 28px auto 40px;
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+    line-height: 1.4;
+}
+
+.inner-cta--wide .inner-cta__title {
+    max-width: none;
+    font-size: clamp(2.2rem, 5vw, 5.4rem);
+}
+
+.inner-cta__actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.inner-cta__sticker {
+    position: absolute;
+    animation: sticker-float 6s ease-in-out infinite;
+}
+
+.inner-cta__sticker--a { width: clamp(70px, 7vw, 110px); top: 12%; left: 6%; --r: -10deg; }
+.inner-cta__sticker--b { width: clamp(60px, 6vw, 96px); bottom: 12%; right: 7%; --r: 8deg; animation-delay: -3s; }
+
+/* ─── Placeholder para imágenes que faltan ─── */
+.media-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-linear-gradient(45deg, var(--crema), var(--crema) 14px, #fff1e3 14px, #fff1e3 28px);
+    color: var(--color-dark);
+}
+
+.media-placeholder span {
+    font-family: 'Reenie Beanie', cursive;
+    font-size: 1.9rem;
+    opacity: 0.6;
+}
+
+/* ─── Proyectos: filtros + grilla ─── */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 56px;
+}
+
+.filter-pill {
+    font: inherit;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-dark);
+    background: transparent;
+    color: var(--color-dark);
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    transition: background-color 0.25s, color 0.25s, transform 0.25s;
+}
+
+.filter-pill sup {
+    font-size: 0.65em;
+    margin-left: 4px;
+    opacity: 0.6;
+}
+
+.filter-pill:hover { transform: translateY(-2px); }
+.filter-pill.is-active { background: var(--color-dark); color: var(--blanco-hueso); }
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 72px 32px;
+}
+
+.project-card {
+    display: block;
+    animation: card-in 0.7s cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+@keyframes card-in {
+    from { opacity: 0; transform: translateY(40px); }
+}
+
+.project-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 28px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.project-card__media img,
+.project-card__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.project-card:hover .project-card__media img,
+.project-card:hover .project-card__media video { transform: scale(1.05); }
+
+.project-card__cta {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: var(--blanco-hueso);
+    color: var(--color-dark);
+    font-weight: 800;
+    opacity: 0;
+    transform: translateY(12px) rotate(-3deg);
+    transition: opacity 0.3s, transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.project-card:hover .project-card__cta { opacity: 1; transform: translateY(0) rotate(-3deg); }
+
+.project-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.6;
+}
+
+.project-card__title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-top: 8px;
+}
+
+/* ─── Proyecto: caso ─── */
+.case__band {
+    padding: 118px 0 175px; /* "← Proyectos" debajo de la barra del logo/menú (si queda detrás, no se puede clickear) */
+    border-radius: 0 0 48px 48px;
+}
+
+.case__back {
+    display: inline-block;
+    font-weight: 800;
+    margin-bottom: 28px;
+    opacity: 0.75;
+}
+
+.case__band .inner-eyebrow { display: block; }
+
+.case__hero {
+    margin-top: -140px;
+    border-radius: 28px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    position: relative;
+}
+
+.case__hero img,
+.case__hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.case__hero .media-placeholder { aspect-ratio: auto; }
+
+.case__body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 64px;
+    margin: 96px 0;
+}
+
+.case__meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px 20px;
+    align-content: start;
+    font-size: 0.95rem;
+}
+
+.case__meta dt {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    padding-top: 3px;
+}
+
+.case__meta dd { font-weight: 800; }
+.case__meta .chips { margin-top: 0; }
+
+.case__lead {
+    font-family: 'Nikkei Journal', serif;
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.case__nota {
+    position: relative;
+    border-radius: 36px;
+    padding: 72px clamp(28px, 6vw, 96px);
+    margin: 32px 0; /* mismo aire arriba (tarjeta del relato) y abajo (bloques) */
+}
+
+.case__nota p {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.3rem, 2.5vw, 2.8rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+}
+
+.case__nota img {
+    position: absolute;
+    top: -26px;
+    right: 48px;
+    width: 64px;
+    animation: sticker-float 5s ease-in-out infinite;
+}
+
+.case__nota--azul { background: var(--azul); color: var(--blanco-hueso); }
+.case__nota--rosa { background: var(--rosa); }
+.case__nota--naranja { background: var(--naranja); }
+.case__nota--rojo { background: var(--rojo); color: var(--blanco-hueso); }
+.case__nota--crema { background: var(--crema); }
+
+.case__gallery {
+    columns: 2;
+    column-gap: 20px;
+}
+
+.case__img-wrap {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* La primera imagen de la galería va a todo el ancho, como la portada */
+.case__img-wrap:first-child {
+    column-span: all;
+    border-radius: 28px;
+}
+
+.case__img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.case__next {
+    display: block;
+    margin: 120px 16px 0;
+    border-radius: 48px;
+    padding: 80px 0;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.case__next:hover { transform: scale(0.99); }
+
+.case__next-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.case__next strong {
+    display: block;
+    font-family: 'Nikkei Journal', serif;
+    font-size: clamp(2.4rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+
+.case__next em {
+    display: block;
+    font-style: normal;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    margin-top: 12px;
+}
+
+.case__next-thumb {
+    width: min(36vw, 420px);
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transform: rotate(3deg);
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.case__next:hover .case__next-thumb { transform: rotate(-2deg) scale(1.04); }
+
+.case__next-thumb img,
+.case__next-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ─── Accesibilidad / responsive ─── */
+@media (prefers-reduced-motion: reduce) {
+    .inner-cta__sticker,
+    .case__nota img,
+    .project-card { animation: none; }
+}
+
+@media (max-width: 1024px) {
+    .wrap { padding: 0 40px; }
+    .find-grid { grid-template-columns: repeat(2, 1fr); }
+    .service-row { grid-template-columns: 70px 1fr; }
+    .service-row > div { grid-column: 2; }
+    .hover-preview { display: none; }
+}
+
+@media (max-width: 768px) {
+    .wrap { padding: 0 16px; }
+    .section { padding-top: 80px; padding-bottom: 80px; }
+    .inner-hero { padding: 140px 0 72px; min-height: 80vh; border-radius: 0 0 32px 32px; }
+    .inner-hero__title br { display: none; } /* el corte en 2 líneas es para desktop; en celular corta solo */
+    .panel, .inner-cta { margin: 16px 8px; border-radius: 32px; }
+    .panel--cream { padding: 80px 0; }
+    .inner-cta { padding: 96px 20px; }
+    .inner-cta__sticker--b { top: 18px; bottom: auto; right: 18px; } /* en celular la carita tapaba los botones */
+    .split, .case__body { grid-template-columns: 1fr; gap: 32px; }
+    .split__sticky { position: static; }
+    .project-grid { grid-template-columns: 1fr; gap: 56px; }
+    .find-grid { grid-template-columns: 1fr; }
+    .find-card:nth-child(even) { margin-top: 0; }
+    .find-card { min-height: 230px; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-left: -16px; margin-right: -16px; padding: 0 16px; } /* una fila deslizable */
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-pill { flex: 0 0 auto; font-size: 0.9rem; padding: 10px 18px; }
+    .service-row { grid-template-columns: 1fr; gap: 16px; padding: 36px 0; }
+    .service-row > div { grid-column: auto; }
+    .case__band { padding: 130px 0 160px; }
+    .case__hero { margin-top: -100px; }
+    .case__gallery { columns: 1; }
+    .case__next { margin: 80px 8px 0; padding: 56px 0; }
+    .case__next-inner { flex-direction: column; align-items: flex-start; }
+    .case__next-thumb { width: 100%; }
+}
+
+/* Ilustración decorativa a la derecha del manifiesto */
+.panel--cream { overflow: hidden; }
+.panel__deco {
+    position: absolute;
+    right: 6%;
+    top: 22%;
+    width: clamp(72px, 7vw, 110px); /* mismo tamaño que los stickers de la línea */
+    transform: rotate(8deg);
+    pointer-events: none;
+}
+/* Servicios: pantaloncito que camina de costado */
+.panel__deco--walk { width: clamp(84px, 8vw, 130px); right: 9%; top: 30%; transform: rotate(-6deg); }
+
+@media (max-width: 768px) {
+    .panel__deco { width: 60px; top: auto; bottom: 16px; right: 16px; }
+    .panel__deco--walk { width: 64px; }
+}
+
+/* ─── Línea "Jogging" que recorre la página (RunLine) ─── */
+.inner-page { position: relative; }
+
+.run-line {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.run-line svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: visible;
+}
+
+.run-line svg path {
+    stroke: var(--run-color);
+    stroke-width: 44;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.run-line--azul { --run-color: var(--azul); }
+.run-line--naranja { --run-color: var(--naranja); }
+.run-line--rosa { --run-color: var(--rosa); }
+
+/* Nubes y stickers que aparecen al paso de la línea. GSAP maneja transform (pop);
+   el flote usa la propiedad translate para no pisarse con GSAP. */
+.run-line__deco {
+    position: absolute;
+    height: auto;
+    animation: deco-float 5s ease-in-out infinite;
+}
+
+.run-line__deco:nth-child(even) { animation-duration: 6.5s; animation-delay: -2s; }
+
+@keyframes deco-float {
+    50% { translate: 0 -12px; }
+}
+
+@media (max-width: 768px) {
+    .run-line svg path { stroke-width: 18; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .run-line__deco { animation: none; }
+}
+
+/* ─── Proyecto: bloques según el formato del material (CaseBlock) ─── */
+.case__hero-block { margin-top: -140px; position: relative; }
+
+.case__blocks {
+    display: grid;
+    gap: 32px; /* mismo aire que alrededor de la frase destacada: las tarjetas se leen como un bloque */
+}
+
+.case-video,
+.case-piece { margin: 0; }
+
+.case-video figcaption,
+.case-piece figcaption {
+    margin-top: 14px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    text-align: center;
+}
+
+.case-video__frame {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #111;
+    line-height: 0;
+}
+
+.case-video video,
+.case-piece img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.case-video__sound {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5)); /* sin círculo: la sombra lo hace legible sobre el video */
+    line-height: 0;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    transition: transform 0.25s, background-color 0.25s;
+}
+
+.case-video__sound:hover { transform: translateY(-2px) rotate(-2deg); }
+.case-video__sound[aria-pressed="true"] { color: var(--rosa); }
+
+/* Ancho: horizontal a todo el ancho */
+.cb-wide .case-video__frame,
+.cb-wide .case-piece img { border-radius: 28px; }
+
+/* Fila: piezas verticales a la misma altura */
+.cb-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cb-row img,
+.cb-row video {
+    height: min(68vh, 640px);
+    width: auto;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+.cb-row--grande img,
+.cb-row--grande video { height: min(86vh, 880px); }
+
+.cb-row--ajustar { flex-wrap: nowrap; }
+.cb-row--ajustar > div { min-width: 0; }
+.cb-row--ajustar img,
+.cb-row--ajustar video { height: auto; width: 100%; }
+
+/* fila sobre tarjeta blanca (misma familia que la tarjeta del relato) */
+.cb-row--tarjeta {
+    background: var(--color-white);
+    border-radius: 36px;
+    padding: clamp(14px, 1.6vw, 24px);
+    gap: clamp(14px, 1.6vw, 24px);
+}
+
+/* Carrusel: tira horizontal con flechas; todas las piezas a la misma altura (fotos y videos) */
+.cb-carousel-wrap { min-width: 0; } /* dentro de la grilla de bloques: que desborde en vez de estirarse */
+
+.cb-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.cb-carousel::-webkit-scrollbar { display: none; }
+
+.cb-carousel__item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.cb-carousel__item img,
+.cb-carousel__item video {
+    height: min(66vh, 600px);
+    width: auto;
+    border-radius: 18px;
+}
+
+.cb-carousel__item .case-video__frame { border-radius: 18px; }
+
+.cb-carousel__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.cb-carousel__arrow {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-dark);
+    background: transparent;
+    color: var(--color-dark);
+    font: inherit;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    transition: background-color 0.25s, color 0.25s, opacity 0.25s;
+}
+
+.cb-carousel__arrow:hover:not(:disabled) { background: var(--color-dark); color: var(--blanco-hueso); }
+.cb-carousel__arrow:disabled { opacity: 0.25; cursor: default; }
+
+/* Dato destacado */
+.cb-stat {
+    text-align: center;
+}
+
+.cb-stat strong {
+    display: block;
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+}
+
+.cb-stat span {
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+    .case__hero-block { margin-top: -100px; }
+    .case__blocks { gap: 24px; }
+    .cb-row img, .cb-row video { height: auto; width: 100%; }
+    .cb-row > div { width: 100%; }
+    .cb-row--ajustar { flex-wrap: wrap; }
+    .cb-row--ajustar > div { flex: 1 1 100% !important; } /* pisa el flex inline: en celular una debajo de otra */
+    .cb-carousel__item img, .cb-carousel__item video { height: 56vh; }
+}
+
+/* Relato: video vertical + descripción del proyecto, en el mismo panel */
+.cb-relato {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 80px);
+    border-radius: 36px;
+    overflow: hidden; /* el video va pegado a los bordes y toma las esquinas de la tarjeta */
+    background: var(--color-white);
+}
+
+.cb-relato .case-video__frame,
+.cb-relato .case-piece img { border-radius: 0; }
+
+/* si el texto es más alto que el video, el video se estira (recortando apenas) para llegar arriba y abajo de la tarjeta */
+.cb-relato { align-items: stretch; }
+.cb-relato__text { align-self: center; }
+.cb-relato .case-video,
+.cb-relato .case-video__frame { height: 100%; }
+.cb-relato video { min-height: 100%; object-fit: cover; }
+
+/* página de proyecto: fondo gris, la tarjeta del relato queda blanca encima */
+body:has(.case) { background-color: #efece2; }
+
+.cb-relato video {
+    /* alto según pantalla, pero en pantallas medianas se achica para dejarle lugar al texto */
+    height: min(86vh, 880px, calc((100vw - 900px) * 1.6));
+    width: auto;
+}
+
+.cb-relato__text {
+    display: flex;
+    flex-direction: column-reverse; /* texto arriba, ficha abajo */
+    gap: 40px;
+    max-width: 640px;
+    padding: clamp(32px, 4vw, 56px) clamp(32px, 4vw, 64px) clamp(32px, 4vw, 56px) 0;
+}
+
+.cb-relato__text .case__lead { font-size: clamp(1rem, 1.25vw, 1.2rem); line-height: 1.5; }
+
+/* título del proyecto dentro de la tarjeta (con relato, la banda de color solo lleva "← Proyectos") */
+.cb-relato__title {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 3.2vw, 3.1rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-top: 12px;
+}
+.case__band--short { padding: 118px 0 125px; }
+@media (max-width: 768px) { .case__band--short { padding: 110px 0 140px; } }
+
+/* pantallas medianas: texto debajo del video */
+@media (max-width: 1200px) {
+    .cb-relato { grid-template-columns: 1fr; justify-items: center; gap: 0; }
+    .cb-relato__text { padding: clamp(28px, 4vw, 48px); }
+    .cb-relato video { height: min(80vh, 720px); }
+}
+
+@media (max-width: 768px) {
+    .cb-relato { grid-template-columns: 1fr; border-radius: 28px; }
+    .cb-relato video { height: auto; width: 100%; }
+}
+
+/* Entrada con pop de los stickers (InnerFx agrega .pop y, al verse, .is-in) */
+.pop {
+    scale: 0;
+    rotate: -25deg;
+    transition: scale 0.7s cubic-bezier(0.34, 1.7, 0.64, 1), rotate 0.7s cubic-bezier(0.34, 1.7, 0.64, 1);
+}
+
+.pop.is-in {
+    scale: 1;
+    rotate: 0deg;
+}
+
+/* Home: las secciones alternan el fondo blanco hueso con blanco puro */
+.home-alt { background: var(--color-white); }
+
+/* ─── Reel abierto (dialog) ─── */
+.case-video__frame--open { cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer; }
+.case-video__frame--open:focus-visible { outline: 3px solid var(--azul); outline-offset: 4px; }
+
+.reel-modal {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    background: var(--blanco-hueso);
+    color: var(--color-dark);
+    width: fit-content; /* tan ancho como video + texto, sin aire de sobra a la derecha */
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+}
+.reel-modal:focus { outline: none; } /* el navegador le pone foco al abrir y se veía un borde negro */
+.reel-modal::backdrop { background: rgba(10, 10, 10, 0.78); }
+.reel-modal[open] { animation: reel-in 0.35s cubic-bezier(0.2, 0, 0, 1); }
+@keyframes reel-in { from { opacity: 0; transform: translateY(24px) scale(0.97); } }
+
+.reel-modal__inner {
+    position: relative;
+    display: grid;
+    --reel-w: calc(min(78dvh, 720px) * 9 / 16); /* ancho del video vertical */
+    grid-template-columns: var(--reel-w) var(--reel-w); /* el lado del texto mide lo mismo que el reel */
+    align-items: center;
+    padding: 0; /* el video va pegado a los bordes */
+}
+.reel-modal video {
+    display: block;
+    height: min(78dvh, 720px);
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    background: #111;
+}
+.reel-modal__info { padding: 0 52px 0 40px; }
+.reel-modal__info h3 {
+    font-family: 'Nikkei Journal', serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 12px 0 16px;
+}
+.reel-modal__info p { font-size: 1.1rem; line-height: 1.45; max-width: 34ch; }
+.reel-modal__nav { display: flex; gap: 10px; margin-top: 32px; }
+.reel-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: none; /* solo la cruz, sin círculo */
+    color: var(--color-dark);
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+@media (max-width: 768px) {
+    .reel-modal__inner { grid-template-columns: 1fr; gap: 18px; padding: 0 0 24px; }
+    .reel-modal__info { padding: 0 20px; }
+    .reel-modal video { height: auto; width: 100%; max-height: 62dvh; }
+    .reel-modal__close { top: 22px; right: 22px; color: #fff; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); } /* va encima del video */
+    .reel-modal__nav { margin-top: 20px; }
+}
+
+/* ─── PRUEBA: sitio sin stickers (borrar este bloque para que vuelvan) ─── */
+.horizontal-words__sticker-watch,
+.horizontal-words__sticker-cursor,
+.horizontal-words__sticker-phone,
+.motion-card__sticker,
+.marquee-svg-item:nth-child(1),
+.footer-sticker,
+.run-line__deco:not([src*="Nubes"]),
+.panel__deco,
+.inner-cta__sticker,
+.step-card__sticker,
+.case__nota img {
+    display: none !important;
+}

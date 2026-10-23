@@ -1,0 +1,293 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { WHATSAPP_URL } from '@/lib/data';
+
+// Natural size of public/assets/Eimg_hero.png, and where the monitor/laptop/phone
+// screens sit within it (as fractions of the image), measured directly from the
+// artwork's pixels. Used to keep the overlay buttons glued to those screens under
+// object-fit: cover regardless of viewport size/aspect.
+const HERO_IMG_SIZE = { w: 4722, h: 3005 };
+const OVERLAY_RECTS = {
+    monitor: { left: 0.40432, right: 0.57900, top: 0.50083, bottom: 0.64759 },
+    laptop: { left: 0.68595, right: 0.77436, top: 0.63461, bottom: 0.73844 },
+    phone: { left: 0.30008, right: 0.32931, top: 0.77437, bottom: 0.81131 },
+};
+
+function coverRectToViewport(rect, vw, vh) {
+    const scale = Math.max(vw / HERO_IMG_SIZE.w, vh / HERO_IMG_SIZE.h);
+    const renderedW = HERO_IMG_SIZE.w * scale;
+    const renderedH = HERO_IMG_SIZE.h * scale;
+    const offsetX = (vw - renderedW) / 2;
+    const offsetY = (vh - renderedH) / 2;
+    return {
+        left: offsetX + rect.left * renderedW,
+        right: offsetX + rect.right * renderedW,
+        top: offsetY + rect.top * renderedH,
+        bottom: offsetY + rect.bottom * renderedH,
+    };
+}
+
+export default function VimeoHero() {
+    const iframeRef = useRef(null);
+    const audioRef = useRef(null);
+    const playerRef = useRef(null);
+    const bubbleRef = useRef(null);
+    const titleRef = useRef(null);
+    const projectsBtnRef = useRef(null);
+    const laptopContactRef = useRef(null);
+    const phoneWaRef = useRef(null);
+
+    const [isMuted, setIsMuted] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // Native video loads immediately enough that we don't need a heavy ready listener.
+    // We already handle `setIsLoaded(true)` directly on the <video onLoadedData={...}> element.
+
+    // React doesn't reliably reflect the `muted` JSX attribute as the real DOM property
+    // on media elements after hydration, which can silently block autoplay — set it
+    // imperatively and kick off playback ourselves instead of trusting `autoPlay` alone.
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+        audio.muted = true;
+        audio.play().catch(() => { });
+    }, []);
+
+    /* ────────────────────────────────────────────────────
+       ④ Hover mute bubble — same GSAP elastic spring as CursorBubble
+    ──────────────────────────────────────────────────── */
+    useEffect(() => {
+        const bubble = bubbleRef.current;
+        const hero = playerRef.current;
+        const title = titleRef.current;
+        if (!bubble || !hero) return;
+
+        const xTo = gsap.quickTo(bubble, 'x', { duration: 0.5, ease: 'power3' });
+        const yTo = gsap.quickTo(bubble, 'y', { duration: 0.5, ease: 'power3' });
+
+        const onMove = (e) => {
+            xTo(e.clientX + 13);
+            yTo(e.clientY - 43);
+        };
+
+        const onEnter = () => {
+            gsap.killTweensOf(bubble, 'opacity,scale,rotation');
+            gsap.to(bubble, { opacity: 1, scale: 1, rotation: 0, duration: 1.7, delay: 0.05, ease: 'elastic.out(1, 0.4)' });
+        };
+
+        const onLeave = () => {
+            gsap.killTweensOf(bubble, 'opacity,scale,rotation');
+            gsap.to(bubble, { opacity: 0, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
+        };
+
+        const hideBubbleForElement = () => {
+            gsap.killTweensOf(bubble, 'opacity,scale,rotation');
+            gsap.to(bubble, { opacity: 0, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
+        };
+
+        const showBubbleForElement = () => {
+            gsap.killTweensOf(bubble, 'opacity,scale,rotation');
+            gsap.to(bubble, { opacity: 1, scale: 1, rotation: 0, duration: 0.3, ease: 'sine.inOut' });
+        };
+
+        const onTitleEnter = () => {
+            hideBubbleForElement();
+        };
+
+        const onTitleLeave = () => {
+            showBubbleForElement();
+        };
+
+        window.addEventListener('mousemove', onMove);
+        hero.addEventListener('mouseenter', onEnter);
+        hero.addEventListener('mouseleave', onLeave);
+
+        if (title) {
+            title.addEventListener('mouseenter', onTitleEnter);
+            title.addEventListener('mouseleave', onTitleLeave);
+        }
+
+        // Desk-illustration buttons also sit above the mute cloud — hide it on hover
+        const overlayEls = [projectsBtnRef.current, laptopContactRef.current, phoneWaRef.current].filter(Boolean);
+        overlayEls.forEach((el) => {
+            el.addEventListener('mouseenter', hideBubbleForElement);
+            el.addEventListener('mouseleave', showBubbleForElement);
+        });
+
+        return () => {
+            window.removeEventListener('mousemove', onMove);
+            hero.removeEventListener('mouseenter', onEnter);
+            hero.removeEventListener('mouseleave', onLeave);
+
+            if (title) {
+                title.removeEventListener('mouseenter', onTitleEnter);
+                title.removeEventListener('mouseleave', onTitleLeave);
+            }
+            overlayEls.forEach((el) => {
+                el.removeEventListener('mouseenter', hideBubbleForElement);
+                el.removeEventListener('mouseleave', showBubbleForElement);
+            });
+        };
+    }, []);
+
+    /* ── Keep the desk-illustration overlays glued to their screens ── */
+    useEffect(() => {
+        const updateOverlayPositions = () => {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const monitor = coverRectToViewport(OVERLAY_RECTS.monitor, vw, vh);
+            // Celular: la notebook queda fuera del recorte, "Contáctanos" va en el monitor debajo de "Proyectos"
+            const laptop = coverRectToViewport(vw <= 900 ? OVERLAY_RECTS.monitor : OVERLAY_RECTS.laptop, vw, vh);
+            const phone = coverRectToViewport(OVERLAY_RECTS.phone, vw, vh);
+
+            if (projectsBtnRef.current) {
+                // Dead center of the monitor screen
+                projectsBtnRef.current.style.left = `${(monitor.left + monitor.right) / 2}px`;
+                projectsBtnRef.current.style.top = `${(monitor.top + monitor.bottom) / 2}px`;
+            }
+            if (laptopContactRef.current) {
+                // Dead center of the laptop screen (CSS handles the perspective tilt)
+                laptopContactRef.current.style.left = `${(laptop.left + laptop.right) / 2}px`;
+                laptopContactRef.current.style.top = `${(laptop.top + laptop.bottom) / 2}px`;
+            }
+            if (phoneWaRef.current) {
+                // Floats above the phone as a speech bubble, not glued to its screen.
+                // Celular: el teléfono queda fuera del recorte; va centrado debajo del monitor, entre el estante y el teclado
+                const mobile = vw <= 900;
+                phoneWaRef.current.style.left = `${mobile ? (monitor.left + monitor.right) / 2 : (phone.left + phone.right) / 2}px`;
+                phoneWaRef.current.style.top = `${mobile ? monitor.bottom + (monitor.bottom - monitor.top) * 0.85 : phone.top}px`;
+            }
+        };
+
+        updateOverlayPositions();
+        window.addEventListener('resize', updateOverlayPositions);
+        return () => window.removeEventListener('resize', updateOverlayPositions);
+    }, []);
+
+    /* ── Controls ── */
+    const toggleMute = (e) => {
+        if (e) e.stopPropagation();
+        if (!iframeRef.current) return;
+        const willUnmute = isMuted;
+        iframeRef.current.muted = !isMuted;
+        if (audioRef.current) audioRef.current.muted = !isMuted;
+        // Re-issue play() synchronously inside this trusted click handler — some
+        // browsers otherwise never actually start audible playback after a reload,
+        // even though muted/paused flags look fine.
+        if (willUnmute) {
+            iframeRef.current.play().catch(() => { });
+            audioRef.current?.play().catch(() => { });
+        }
+        setIsMuted(m => !m);
+    };
+
+    return (
+        <>
+            {/* ④ Hover mute bubble — follows cursor over the video */}
+            <div
+                ref={bubbleRef}
+                className={`vimeo-mute-bubble ${isMuted ? 'is--muted' : 'is--unmuted'}`}
+                style={{ pointerEvents: 'none' }}
+            >
+                <div className="vimeo-mute-bubble__blob">
+                    {/* Blob shape */}
+                    <img
+                        src="/assets/Nubes/2nube-comic.svg"
+                        alt=""
+                        className="vimeo-mute-bubble__blob-svg"
+                    />
+                    {/* Mute icon (shown when sound is ON → click to mute) */}
+                    <div className="vimeo-mute-bubble__icon vimeo-mute-bubble__mute">
+                        <svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.3818 8.50039C12.8934 7.92803 13.7447 7.84041 14.3584 8.26992C14.3696 8.28308 14.3799 8.29711 14.3916 8.30996L14.501 8.41738L52.001 41.9174L52.1201 42.0141C52.6204 42.5885 52.6243 43.4317 52.1182 43.9984C51.6007 44.5775 50.7353 44.6609 50.1201 44.2143L50.001 44.1176L44.999 39.6488C44.2681 40.687 43.4506 41.6601 42.5557 42.5551C41.9699 43.1407 41.0203 43.1408 40.4346 42.5551C39.8493 41.9693 39.8492 41.0197 40.4346 40.434C41.2902 39.5783 42.0647 38.6412 42.7451 37.6361L37.8271 33.2416C37.2776 34.1931 36.6101 35.068 35.8389 35.8393C35.2532 36.4247 34.3035 36.4246 33.7178 35.8393C33.1321 35.2534 33.132 34.3029 33.7178 33.7172C34.452 32.9828 35.0644 32.1286 35.5273 31.1879L29 25.3559V43.4994C28.9999 44.0475 28.7004 44.5517 28.2197 44.8148C27.7389 45.0778 27.1531 45.0583 26.6914 44.7631L14.6846 37.0785C14.6042 37.0272 14.5104 36.9995 14.415 36.9994H8.5C6.56706 36.9994 5.0001 35.4323 5 33.4994V20.4994C5.00017 18.5666 6.56711 16.9994 8.5 16.9994H14.415C14.5105 16.9994 14.6042 16.9718 14.6846 16.9203L17.5225 15.1029L12.501 10.6176L12.3916 10.5102C11.8788 9.94899 11.8646 9.07956 12.3818 8.50039Z" fill="currentColor" />
+                            <path d="M40.4346 11.4428C41.0203 10.8572 41.9699 10.8573 42.5557 11.4428C46.5351 15.4222 48.9998 20.924 49 26.9984C49 29.5023 48.5806 31.909 47.8096 34.1518L45.3447 31.9506C45.7703 30.3718 46 28.712 46 26.9984C45.9998 21.7516 43.8744 17.0037 40.4346 13.5639C39.8492 12.9782 39.8492 12.0285 40.4346 11.4428Z" fill="currentColor" />
+                            <path d="M33.7178 18.1615C34.3035 17.576 35.2531 17.576 35.8389 18.1615C38.0388 20.3616 39.4237 23.3831 39.4961 26.725L35.8018 23.4242C35.3201 22.2398 34.6083 21.1732 33.7178 20.2826C33.1321 19.6968 33.132 18.7472 33.7178 18.1615Z" fill="currentColor" />
+                            <path d="M26.6914 9.23574C27.153 8.94049 27.7389 8.92026 28.2197 9.18301C28.7004 9.44611 28.9999 9.95137 29 10.4994V17.348L22.7451 11.7602L26.6914 9.23574Z" fill="currentColor" />
+                        </svg>
+                    </div>
+                    {/* Unmute icon (shown when muted → click to unmute) */}
+                    <div className="vimeo-mute-bubble__icon vimeo-mute-bubble__unmute">
+                        <svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M29 10.5C29 9.95184 28.701 9.44732 28.2202 9.18416C27.7392 8.921 27.1532 8.9411 26.6914 9.2366L14.6843 16.9211C14.6039 16.9726 14.5103 17 14.4148 17H8.5C6.567 17 5 18.567 5 20.5V33.5C5 35.433 6.567 37 8.5 37H14.4148C14.5103 37 14.6039 37.0274 14.6843 37.0788L26.6914 44.7634C27.1532 45.0588 27.7392 45.079 28.2202 44.8158C28.701 44.5526 29 44.0482 29 43.5V10.5Z" fill="currentColor" />
+                            <path d="M40.435 11.4432C41.0208 10.8575 41.9704 10.8575 42.5562 11.4432C46.5358 15.4228 49 20.9249 49 26.9996C49 33.0744 46.5358 38.5764 42.5562 42.556C41.9704 43.1418 41.0208 43.1418 40.435 42.556C39.8492 41.9702 39.8492 41.0204 40.435 40.4346C43.875 36.9946 46 32.2468 46 26.9996C46 21.7525 43.875 17.0045 40.435 13.5646C39.8492 12.9788 39.8492 12.029 40.435 11.4432Z" fill="currentColor" />
+                            <path d="M35.8388 18.162C35.253 17.5762 34.3032 17.5762 33.7174 18.162C33.1316 18.7478 33.1316 19.6975 33.7174 20.2833C35.4382 22.0041 36.5 24.377 36.5 27.0008C36.5 29.6246 35.4382 31.9976 33.7174 33.7184C33.1316 34.3042 33.1316 35.2538 33.7174 35.8396C34.3032 36.4254 35.253 36.4254 35.8388 35.8396C38.0992 33.5792 39.5 30.4522 39.5 27.0008C39.5 23.5494 38.0992 20.4224 35.8388 18.162Z" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Main hero container ── */}
+            <div
+                className={`vimeo-hero ${isMuted ? 'is-muted' : 'is-unmuted'}`}
+                ref={playerRef}
+                onClick={toggleMute}
+            >
+                {/* 
+                  Video Placeholder: 
+                  Currently left blank to display a solid black background while you work on text, SVGs, and the navbar.
+                  Once you have your personal video file in the `public/` folder, uncomment and update the src below!
+                */}
+                <video
+                    ref={iframeRef}
+                    // src="/your-personal-video.mp4"
+                    poster="/assets/Eimg_hero.png"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="vimeo-hero__iframe"
+                    style={{ objectFit: 'cover', backgroundColor: '#111' }}
+                />
+
+                {/* Background music — muted/paused in lockstep with the video controls */}
+                <audio
+                    ref={audioRef}
+                    src="/fassounds-good-night-lofi-cozy-chill-music-160166.mp3"
+                    autoPlay
+                    loop
+                    muted
+                />
+
+                {/* Gradient fade */}
+                <div className="vimeo-hero__fade" />
+
+                {/* ⑤ Desk-illustration overlays — CTA above the monitor, contact on the laptop, WhatsApp on the phone */}
+                <a
+                    ref={projectsBtnRef}
+                    href="/proyectos"
+                    className="vimeo-hero__projects-btn"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Proyectos
+                </a>
+
+                <a
+                    ref={laptopContactRef}
+                    href="#contacto"
+                    className="vimeo-hero__laptop-contact"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Contáctanos
+                </a>
+
+                <a
+                    ref={phoneWaRef}
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="vimeo-hero__phone-whatsapp"
+                    aria-label="WhatsApp"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.4 21 3 13.6 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" fill="currentColor" />
+                    </svg>
+                </a>
+
+                {/* Loading spinner removed because native HTML video loads silently in background */}
+            </div>
+        </>
+    );
+}

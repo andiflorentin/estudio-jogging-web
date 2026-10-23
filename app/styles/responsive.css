@@ -1,0 +1,272 @@
+
+/* ─── Medium screens (≤ 900px) ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .footer-top {
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .footer-column h3,
+    .footer-column address,
+    .footer-email {
+        font-size: 1.5rem;
+    }
+
+    .footer-big-text {
+        font-size: 40vw;
+    }
+}
+
+/* ─── Mobile (≤ 768px) ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* ── Navbar ─────────────────────── */
+    .navbar {
+        padding: 14px 16px;
+    }
+
+    .logo-truus {
+        width: 100px;
+    }
+
+    /* MENÚ dentro de la nube (antes el texto quedaba corrido afuera) */
+    .logo-work-container {
+        padding: 18px 28px;
+    }
+
+    .logo-work-text {
+        font-size: 0.85rem;
+    }
+
+    .nav-bar__whatsapp-svg {
+        width: 26px;
+    }
+
+    /* ── Header Hero ────────────────── */
+    .header-content {
+        height: 100svh;
+        padding: 0 24px;
+        text-align: center;
+    }
+
+    .header-content h1 {
+        font-size: 2rem;
+    }
+
+    /* ── Content / Hero Title ───────── */
+    .content-section {
+        padding: 80px 0 0;
+        overflow: visible;
+    }
+
+    .main-title {
+        font-size: 3rem;
+        letter-spacing: -2px;
+    }
+
+    .title-underline-svg {
+        width: 100px;
+        bottom: -10px;
+    }
+
+    .title-container {
+        margin-bottom: 50px;
+    }
+
+    /* ── Double Marquee ─────────────── */
+    .Double-marquee {
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 16px 0; /* los logos terminan en el borde de abajo */
+        gap: 10px;
+        min-height: unset;
+    }
+
+    /* título centrado */
+    .marquee-left {
+        max-width: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        min-height: 340px;
+    }
+
+    .marquee-text-container {
+        text-align: center;
+    }
+
+    /* nubes de abajo más chicas y centradas */
+    .marquee-clouds { justify-content: center; margin: -6px 0 0; zoom: 0.62; }
+
+    .marquee-left h2 {
+        font-size: 2.3rem; /* con aire dentro de la nube */
+        letter-spacing: -1.5px;
+        margin-bottom: 0;
+        margin-right: 0;
+    }
+
+    .marquee-blob-container {
+        width: 240px;
+        height: 280px;
+        top: 55%;
+        left: 50%;
+    }
+
+    .marquee-svg-item:nth-child(1) {
+        width: 60px;
+        bottom: 0;
+        left: 50%;
+    }
+
+    /* la flecha apuntaba al costado (en desktop señala los logos de la derecha): en celular no va */
+    .marquee-svg-item:nth-child(2) {
+        display: none;
+    }
+
+
+    /* Logos: mismas dos columnas que suben y bajan que en desktop, a lo ancho de la pantalla */
+    .marquee-right {
+        width: 100%;
+        height: 560px;
+        margin-right: 0;
+    }
+
+    .marquee-item {
+        width: 100%;
+        height: 170px;
+    }
+
+    /* ── Footer ─────────────────────── */
+    .main-footer {
+        padding: 6px;
+    }
+
+    .footer-inner {
+        padding: 50px 20px 30px;
+        border-radius: 14px;
+        min-height: 100svh;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 36px;
+        transform: none;
+    }
+
+    /* Redes en fila arriba del contacto (en desktop van posicionadas encima y en celular lo tapaban) */
+    .footer-socials {
+        position: static;
+        transform: none;
+        justify-content: center;
+        margin: 60px 0 40px;
+    }
+
+    /* contacto centrado */
+    .footer-column {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-contact-group,
+    .footer-contact-group--right {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* legible en celular (antes 11.5px) y en dos líneas */
+    .footer-note { font-size: 0.78rem; } /* legible en celular (antes 11.5px) */
+    .footer-note__br { display: inline; } /* dos líneas: corta después de "Z:" */
+
+    .footer-column h3 {
+        font-size: 1.4rem;
+        letter-spacing: -0.5px;
+    }
+
+    .footer-column address {
+        font-size: 1.25rem;
+    }
+
+    .footer-email {
+        font-size: 1.3rem;
+    }
+
+    .footer-whatsapp {
+        font-size: 1.1rem;
+        margin-top: -6px;
+    }
+
+    .footer-map-link {
+        font-size: 0.95rem;
+    }
+
+    /* ── Footer Stickers (mobile) ──── */
+    .sticker-boom {
+        left: 2%;
+        bottom: 10%;
+        width: 90px;
+    }
+
+    .sticker-smiley {
+        left: 30%;
+        bottom: 5%;
+        width: 90px;
+    }
+
+    .sticker-heart {
+        left: 50%;
+        bottom: 18%;
+        width: 85px;
+    }
+
+    .footer-sticker.sticker-hands {
+        left: 60%;
+        bottom: 2%;
+        width: 90px;
+    }
+
+    .footer-sticker.sticker-100 {
+        left: 72%;
+        bottom: 20%;
+        width: 80px;
+    }
+
+    .footer-sticker.sticker-camera {
+        right: 2%;
+        bottom: 8%;
+        width: 85px;
+    }
+
+    /* ── Footer wordmark ────────────── */
+    .footer-bottom {
+        margin-top: 200px;
+    }
+
+    .footer-logo__svg {
+        width: 110%;
+        margin-left: -5%;
+    }
+
+    /* ── Credits badge ──────────────── */
+    .footer-credits-wrapper {
+        margin-right: -15px;
+        margin-bottom: -15px;
+    }
+
+    .footer-credits {
+        font-size: 0.75rem;
+    }
+
+    .credits-box {
+        padding: 16px 20px;
+        gap: 20px;
+    }
+
+    .credits-label {
+        font-size: 0.85rem;
+    }
+
+    .credits-name {
+        font-size: 0.95rem;
+    }
+}
