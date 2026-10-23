@@ -6,7 +6,7 @@ Sitio web de **Estudio Jogging**, construido como una aplicación **Next.js + Re
 
 ## 🚀 Overview
 
-Landing page de una sola página con un hero ilustrado interactivo, secciones de servicios, marquee de marcas, y footer con créditos animados.
+Sitio con home, páginas internas (Servicios, Nosotros, Proyectos y una página por proyecto) y visor de reels. La home tiene un hero ilustrado interactivo, lista de servicios, marquee de marcas y footer con créditos animados.
 
 ### ⚠️ Nota sobre el video del hero
 El componente del hero usa un elemento `<video>` HTML5 con el `src` sin definir, mostrando el poster de fondo (`public/assets/Eimg_hero.png`). Para agregar un video de fondo real, colocá el `.mp4` en `public/` y actualizá el `src` en `VimeoHero.jsx`.
@@ -19,7 +19,7 @@ El componente del hero usa un elemento `<video>` HTML5 con el `src` sin definir,
 
 - **GSAP InertiaPlugin Fling** — Las cards y labels flotantes siguen la velocidad del mouse; al salir, se lanzan con física de inercia y vuelven a su lugar.
 - **Page Transition Scribble** — Máscara de garabato a pantalla completa que se dibuja/desdibuja al hacer click en el logo.
-- **Elastic Card Interactions** — Las service cards se despliegan horizontalmente al hover con física elástica.
+- **Lista de servicios** — Filas con número, título y texto; al pasar el mouse muestran una imagen que sigue al cursor.
 - **Scroll-Triggered SVG Draws** — Subrayados y trazos dibujados a mano se animan vía `stroke-dasharray` al hacer scroll.
 - **Footer Sticker Proximity Push** — Los stickers del footer reaccionan a swipes rápidos del cursor cercano.
 - **Wiggle System** — Rotación configurable por elemento al hover, controlada desde `WIGGLE_CONFIG`.
